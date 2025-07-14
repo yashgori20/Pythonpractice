@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swift Check AI - Product Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 32px;
+            border-radius: 8px;
+        }
+
+        .form-tabs {
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 32px;
+        }
+
+        .tab {
+            display: inline-block;
+            padding: 12px 0;
+            margin-right: 32px;
+            border-bottom: 3px solid #dc2626;
+            color: #dc2626;
+            font-weight: 600;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .radio-option input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            margin: 0;
+        }
+
+        .packaging-section {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .packaging-section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .packaging-grid {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .packaging-input {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            width: 80px;
+            text-align: center;
+        }
+
+        .packaging-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .packaging-unit {
+            font-size: 14px;
+            color: #666;
+            min-width: 60px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 16px;
+            justify-content: flex-end;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-cancel {
+            background-color: white;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-cancel:hover {
+            background-color: #f9fafb;
+        }
+
+        .btn-primary {
+            background-color: #dc2626;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #b91c1c;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Page 2 Specific Styles */
+        .page-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: #374151;
+        }
+
+        .parameter-section {
+            margin-bottom: 24px;
+        }
+
+        .parameter-section h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .slider {
+            flex: 1;
+            height: 6px;
+            border-radius: 3px;
+            background: #e5e7eb;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #dc2626;
+            cursor: pointer;
+        }
+
+        .slider-value {
+            font-size: 12px;
+            color: #666;
+            min-width: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="form-container">
+            <!-- Page 1: Basic Product Information -->
+            <div id="page1">
+                <div class="form-tabs">
+                    <div class="tab">Product Details</div>
+                </div>
+
+                <form>
+                    <!-- Permanent Mandatory Fields -->
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="productName">Product Name</label>
+                            <input type="text" id="productName" placeholder="Enter product name">
+                        </div>
+                        <div class="form-group">
+                            <label for="productCategory">Product Category</label>
+                            <select id="productCategory">
+                                <option value="">Select category</option>
+                                <option value="cereals">Cereals and Cereal Products</option>
+                                <option value="pulses">Pulses and Legumes</option>
+                                <option value="fruits">Fruits and Vegetables</option>
+                                <option value="dairy">Dairy Products</option>
+                                <option value="meat">Meat, Poultry, and Fish</option>
+                                <option value="oils">Fats and Oils</option>
+                                <option value="sugars">Sugars and Sweeteners</option>
+                                <option value="spices">Spices and Condiments</option>
+                                <option value="beverages">Beverages</option>
+                                <option value="frozen">Frozen Foods</option>
+                                <option value="canned">Canned Foods</option>
+                                <option value="baked">Baked Goods</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="productDescription">Product Description</label>
+                            <textarea id="productDescription" placeholder="Enter detailed product description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="complianceStandards">Compliance Standards</label>
+                            <select id="complianceStandards">
+                                <option value="">Select standards</option>
+                                <option value="fssai">FSSAI</option>
+                                <option value="halal">Halal Certified</option>
+                                <option value="organic">Organic Certified</option>
+                                <option value="iso">ISO 22000</option>
+                                <option value="haccp">HACCP</option>
+                                <option value="brc">BRC Food Safety</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Existing Fields -->
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="productId">Product Id</label>
+                            <input type="text" id="productId" value="1003">
+                        </div>
+                        <div class="form-group">
+                            <label for="sku">SKU</label>
+                            <input type="text" id="sku" placeholder="Enter SKU">
+                        </div>
+                        <div class="form-group">
+                            <label for="supplier">Supplier</label>
+                            <select id="supplier">
+                                <option value="">Select</option>
+                                <option value="supplier1">Supplier 1</option>
+                                <option value="supplier2">Supplier 2</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="unit">Unit</label>
+                            <input type="text" id="unit" placeholder="Search for units">
+                        </div>
+                        <div class="form-group">
+                            <label for="netWt">Net Wt</label>
+                            <input type="number" id="netWt" placeholder="Enter weight">
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="active" name="status" value="active" checked>
+                                    <label for="active">Active</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="disable" name="status" value="disable">
+                                    <label for="disable">Disable</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Packaging Section -->
+                    <div class="packaging-section">
+                        <h3>Packaging</h3>
+                        <div class="packaging-grid">
+                            <input type="number" class="packaging-input" value="0" placeholder="0">
+                            <span class="packaging-label">Pieces</span>
+                            <span class="packaging-unit">1 Packet</span>
+                        </div>
+                        <div class="packaging-grid">
+                            <input type="number" class="packaging-input" value="0" placeholder="0">
+                            <span class="packaging-label">Packet</span>
+                            <span class="packaging-unit">1 Carton</span>
+                        </div>
+                        <div class="packaging-grid">
+                            <input type="number" class="packaging-input" value="0" placeholder="0">
+                            <span class="packaging-label">Carton</span>
+                            <span class="packaging-unit">1 Pallet</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="actions">
+                        <button type="button" class="btn btn-cancel">
+                            ✕ Cancel
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="goToPage2()">
+                            Next →
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Page 2: Quality Parameters -->
+            <div id="page2" class="hidden">
+                <div class="form-tabs">
+                    <div class="tab">Quality Parameters</div>
+                </div>
+
+                <div class="page-title">Quality Parameters</div>
+
+                <form>
+                    <!-- BASIC Parameters -->
+                    <div class="parameter-section">
+                        <h4>BASIC</h4>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Processing Type</label>
+                                <select>
+                                    <option>Select processing type</option>
+                                    <option>Raw</option>
+                                    <option>Processed</option>
+                                    <option>Semi-processed</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Size Grade</label>
+                                <input type="text" placeholder="Enter size grade">
+                            </div>
+                            <div class="form-group">
+                                <label>Grade</label>
+                                <select>
+                                    <option>Select grade</option>
+                                    <option>A</option>
+                                    <option>B</option>
+                                    <option>C</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Variety</label>
+                                <input type="text" placeholder="Enter variety">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BEFORE PROCESSING Parameters -->
+                    <div class="parameter-section">
+                        <h4>BEFORE PROCESSING</h4>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Raw Moisture (%)</label>
+                                <div class="slider-container">
+                                    <input type="range" class="slider" min="0" max="100" value="15">
+                                    <span class="slider-value">15%</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Raw Color</label>
+                                <select>
+                                    <option>Select color</option>
+                                    <option>Light</option>
+                                    <option>Medium</option>
+                                    <option>Dark</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Raw Size (mm)</label>
+                                <input type="number" placeholder="Enter size in mm">
+                            </div>
+                            <div class="form-group">
+                                <label>Foreign Matter (%)</label>
+                                <div class="slider-container">
+                                    <input type="range" class="slider" min="0" max="5" value="0.5" step="0.1">
+                                    <span class="slider-value">0.5%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AFTER PROCESSING Parameters -->
+                    <div class="parameter-section">
+                        <h4>AFTER PROCESSING</h4>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Final Moisture (%)</label>
+                                <div class="slider-container">
+                                    <input type="range" class="slider" min="0" max="100" value="12">
+                                    <span class="slider-value">12%</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Final Color</label>
+                                <select>
+                                    <option>Select final color</option>
+                                    <option>Uniform</option>
+                                    <option>Slightly uneven</option>
+                                    <option>Variable</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Uniformity</label>
+                                <select>
+                                    <option>Select uniformity</option>
+                                    <option>Excellent</option>
+                                    <option>Good</option>
+                                    <option>Fair</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Broken/Split (%)</label>
+                                <div class="slider-container">
+                                    <input type="range" class="slider" min="0" max="10" value="2" step="0.5">
+                                    <span class="slider-value">2%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LABORATORY Parameters -->
+                    <div class="parameter-section">
+                        <h4>LABORATORY</h4>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Protein Content (%)</label>
+                                <input type="number" placeholder="Enter protein %" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label>Oil Content (%)</label>
+                                <input type="number" placeholder="Enter oil %" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label>Fiber Content (%)</label>
+                                <input type="number" placeholder="Enter fiber %" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label>Cooking Time (min)</label>
+                                <input type="number" placeholder="Enter cooking time">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- COMPLIANCE Parameters -->
+                    <div class="parameter-section">
+                        <h4>COMPLIANCE</h4>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Halal Status</label>
+                                <select>
+                                    <option>Select status</option>
+                                    <option>Certified</option>
+                                    <option>Not Certified</option>
+                                    <option>Not Applicable</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>GMO Status</label>
+                                <select>
+                                    <option>Select GMO status</option>
+                                    <option>GMO Free</option>
+                                    <option>Contains GMO</option>
+                                    <option>Unknown</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Organic Certification</label>
+                                <select>
+                                    <option>Select certification</option>
+                                    <option>Certified Organic</option>
+                                    <option>Not Organic</option>
+                                    <option>In Process</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Food Safety</label>
+                                <select>
+                                    <option>Select food safety</option>
+                                    <option>HACCP Compliant</option>
+                                    <option>ISO 22000</option>
+                                    <option>BRC Certified</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PACKAGING Parameters -->
+                    <div class="parameter-section">
+                        <h4>PACKAGING</h4>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Package Type</label>
+                                <select>
+                                    <option>Select package type</option>
+                                    <option>Vacuum Sealed</option>
+                                    <option>Modified Atmosphere</option>
+                                    <option>Standard</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Storage Conditions</label>
+                                <select>
+                                    <option>Select storage</option>
+                                    <option>Room Temperature</option>
+                                    <option>Refrigerated</option>
+                                    <option>Frozen</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Shelf Life (days)</label>
+                                <input type="number" placeholder="Enter shelf life">
+                            </div>
+                            <div class="form-group">
+                                <label>Anti-pest Features</label>
+                                <select>
+                                    <option>Select features</option>
+                                    <option>Present</option>
+                                    <option>Not Present</option>
+                                    <option>Not Applicable</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="actions">
+                        <button type="button" class="btn btn-cancel" onclick="goToPage1()">
+                            ← Back
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Generate Product Specification
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goToPage2() {
+            document.getElementById('page1').classList.add('hidden');
+            document.getElementById('page2').classList.remove('hidden');
+        }
+
+        function goToPage1() {
+            document.getElementById('page2').classList.add('hidden');
+            document.getElementById('page1').classList.remove('hidden');
+        }
+
+        // Update slider values dynamically
+        document.addEventListener('DOMContentLoaded', function() {
+            const sliders = document.querySelectorAll('.slider');
+            sliders.forEach(slider => {
+                const valueDisplay = slider.nextElementSibling;
+                slider.addEventListener('input', function() {
+                    let unit = '%';
+                    if (slider.getAttribute('min') === '0' && slider.getAttribute('max') === '5') {
+                        unit = '%';
+                    }
+                    valueDisplay.textContent = this.value + unit;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
